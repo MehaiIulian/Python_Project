@@ -88,10 +88,10 @@ def get_processes_info():
             #print(path)
 
         processes.append({
-            'pid': pid, 'name': name, 'create_time': create_time,
+            'pid': pid, 'name': name,'path': path, 'create_time': create_time,
             'cores': cores, 'cpu_usage': cpu_usage, 'status': status, 'nice': nice,
             'memory_usage': memory_usage, 'read_bytes': read_bytes, 'write_bytes': write_bytes,
-            'n_threads': n_threads,'path': path, 'username': username,
+            'n_threads': n_threads, 'username': username,
         })
 
     return processes
@@ -119,10 +119,10 @@ if __name__ == "__main__":
     import sys
 
     parser = argparse.ArgumentParser(description="Process Viewer & Monitor")
-    parser.add_argument("-c", "--columns", help="""Columns to show,
-                                                available are name,create_time,cores,cpu_usage,status,nice,memory_usage,read_bytes,write_bytes,n_threads,username.
-                                                Default is name,cpu_usage,memory_usage,read_bytes,write_bytes,status,create_time,nice,n_threads,cores.""",
-                        default="name,cpu_usage,memory_usage,read_bytes,write_bytes,status,create_time,nice,n_threads,cores,path,username")
+    parser.add_argument("-c", "--columns", help="""Columns to show,pid is set as index and available columns are 
+                                                name,create_time,cores,cpu_usage,status,nice,memory_usage,read_bytes,write_bytes,n_threads,username.
+                                                Default is name,path.""",
+                        default="name,path")
     parser.add_argument("-s", "--sort-by", dest="sort_by", help="Column to sort by, default is memory_usage .",
                         default="memory_usage")
     parser.add_argument("--descending", action="store_true", help="Whether to sort in descending order.")
@@ -130,41 +130,44 @@ if __name__ == "__main__":
                         default=sys.maxsize)
     parser.add_argument("-u", "--live-update", action="store_true",
                         help="Whether to keep the program on and updating process information each second.")
-    parser.add_argument("--kill", action="store_true", help="Enter the process pid to kill.")
-    parser.add_argument("--create", action="store_true", help="Enter the process pid to create.")
-    parser.add_argument("--suspend", action="store_true", help="Enter the process pid to suspend.")
-    parser.add_argument("--resume", action="store_true", help="Enter the process pid to resume.")
+    parser.add_argument("--kill", help="Enter the process pid to kill.", default=0)
+    parser.add_argument("--create", help="Enter the process pid to create.", default=0)
+    parser.add_argument("--suspend", help="Enter the process pid to suspend.", default=0)
+    parser.add_argument("--resume", help="Enter the process pid to resume.", default=0)
 
     # parse arguments
     args = parser.parse_args()
-    print(args)
     columns = args.columns
     sort_by = args.sort_by
     descending = args.descending
-    kill = args.kill
-    create = args.create
-    suspend = args.suspend
-    resume = args.resume
+    kill = int(args.kill)
+    if kill != 0:
+        p = psutil.Process(kill)
+        p.terminate()
+
+    create = int(args.create)
+    suspend = int(args.suspend)
+    resume = int(args.resume)
     n = int(args.n)
     live_update = args.live_update
     # print the processes for the first time
     processes = get_processes_info()
     df = construct_dataframe(processes)
 
+
     if n == 0:
-        print(df.to_string())
+        print(df)
     elif n > 0:
-        print(df.head(n).to_string())
+        print(df.head(n))
 
     # print continuously
     while live_update:
         # get all process info
         processes = get_processes_info()
         df = construct_dataframe(processes)
-        # clear the screen depending on your OS
-        os.system("cls") if "nt" in os.name else os.system("clear")
+
         if n == 0:
-            print(df.to_string())
+            print(df)
         elif n > 0:
-            print(df.head(n).to_string())
+            print(df.head(n))
         time.sleep(0.7)
