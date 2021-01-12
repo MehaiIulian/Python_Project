@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="21007f95-525e-4ee9-81bf-6f4832ec61a0" name="Default Changelist" comment="+">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-    </list>
+    <list default="true" id="21007f95-525e-4ee9-81bf-6f4832ec61a0" name="Default Changelist" comment="+" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -73,7 +70,7 @@
       <workItem from="1610361712294" duration="974000" />
       <workItem from="1610362894823" duration="4209000" />
       <workItem from="1610372491261" duration="4564000" />
-      <workItem from="1610413968957" duration="4471000" />
+      <workItem from="1610413968957" duration="4515000" />
     </task>
     <task id="LOCAL-00001" summary="+">
       <created>1610377047921</created>
@@ -89,7 +86,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610413986417</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="+processes operations">
+      <created>1610418483259</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1610418483259</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -121,7 +125,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="+" />
-    <option name="LAST_COMMIT_MESSAGE" value="+" />
+    <MESSAGE value="+processes operations" />
+    <option name="LAST_COMMIT_MESSAGE" value="+processes operations" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Project$main.coverage" NAME="main Coverage Results" MODIFIED="1610375670959" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
