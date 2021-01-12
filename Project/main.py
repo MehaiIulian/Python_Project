@@ -6,6 +6,7 @@ import os
 import argparse
 import sys
 import subprocess
+from shutil import which
 
 def get_pid(name):
     pids = []
@@ -135,11 +136,15 @@ def kill_process(name):
             p = psutil.Process(pid)
             p.terminate()
 
+
+
+
+
 def create_process(name):
-    for proc in psutil.process_iter():
-        if name in proc.name():
-            path = proc.exe()
-            subprocess.call([path])
+    try:
+        os.startfile(name)
+    except FileNotFoundError:
+        print("Please check the name again")
 
 if __name__ == "__main__":
 
@@ -160,6 +165,8 @@ if __name__ == "__main__":
     parser.add_argument("--suspend", help="Enter the process pid to suspend.", default=0)
     parser.add_argument("--resume", help="Enter the process pid to resume.", default=0)
     parser.add_argument("--pid", help="Get the pid of a process" , default="-")
+
+
 
     # parse arguments
     args = parser.parse_args()
@@ -182,14 +189,15 @@ if __name__ == "__main__":
         print(create)
         create_process(create)
 
+
     suspend = int(args.suspend)
     resume = int(args.resume)
     n = int(args.n)
     live_update = args.live_update
+
     # print the processes for the first time
     processes = get_processes_info()
     df = construct_dataframe(processes)
-
 
     if n == 0:
         print(df[columns].to_string())
