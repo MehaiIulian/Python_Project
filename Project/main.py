@@ -3,6 +3,17 @@ from datetime import datetime
 import pandas as pd
 import time
 import os
+import argparse
+import sys
+import subprocess
+
+def get_pid(name):
+    pids = []
+    for proc in psutil.process_iter():
+        if name in proc.name():
+            pid = proc.pid
+            pids.append(pid)
+    return pids
 
 
 def get_size(bytes):
@@ -113,10 +124,24 @@ def construct_dataframe(processes):
     # reorder and define used columns
     return df
 
+def Convert(string):
+    li = list(string.split(","))
+    return li
+
+def kill_process(name):
+    for proc in psutil.process_iter():
+        if name in proc.name():
+            pid = proc.pid
+            p = psutil.Process(pid)
+            p.terminate()
+
+def create_process(name):
+    for proc in psutil.process_iter():
+        if name in proc.name():
+            path = proc.exe()
+            subprocess.call([path])
 
 if __name__ == "__main__":
-    import argparse
-    import sys
 
     parser = argparse.ArgumentParser(description="Process Viewer & Monitor")
     parser.add_argument("-c", "--columns", help="""Columns to show,pid is set as index and available columns are 
@@ -130,22 +155,33 @@ if __name__ == "__main__":
                         default=sys.maxsize)
     parser.add_argument("-u", "--live-update", action="store_true",
                         help="Whether to keep the program on and updating process information each second.")
-    parser.add_argument("--kill", help="Enter the process pid to kill.", default=0)
-    parser.add_argument("--create", help="Enter the process pid to create.", default=0)
+    parser.add_argument("--kill", help="Enter the process name to kill.", default=0)
+    parser.add_argument("--create", help="Enter the process name to create.", default=0)
     parser.add_argument("--suspend", help="Enter the process pid to suspend.", default=0)
     parser.add_argument("--resume", help="Enter the process pid to resume.", default=0)
+    parser.add_argument("--pid", help="Get the pid of a process" , default="-")
 
     # parse arguments
     args = parser.parse_args()
     columns = args.columns
+    columns = Convert(columns)
+    #print(columns)
     sort_by = args.sort_by
     descending = args.descending
-    kill = int(args.kill)
-    if kill != 0:
-        p = psutil.Process(kill)
-        p.terminate()
 
-    create = int(args.create)
+    pid = args.pid
+    pid = get_pid(pid)
+    #print(pid)
+
+    kill = args.kill
+    if kill != 0:
+        kill_process(kill)
+
+    create = args.create
+    if create !=0:
+        print(create)
+        create_process(create)
+
     suspend = int(args.suspend)
     resume = int(args.resume)
     n = int(args.n)
@@ -156,9 +192,11 @@ if __name__ == "__main__":
 
 
     if n == 0:
-        print(df)
+        print(df[columns].to_string())
     elif n > 0:
-        print(df.head(n))
+        print(df[columns].head(n).to_string())
+    else:
+        pass
 
     # print continuously
     while live_update:
@@ -167,7 +205,7 @@ if __name__ == "__main__":
         df = construct_dataframe(processes)
 
         if n == 0:
-            print(df)
+            print(df[columns].to_string())
         elif n > 0:
-            print(df.head(n))
+            print(df[columns].head(n).to_string())
         time.sleep(0.7)
