@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="21007f95-525e-4ee9-81bf-6f4832ec61a0" name="Default Changelist" comment="+" />
+    <list default="true" id="21007f95-525e-4ee9-81bf-6f4832ec61a0" name="Default Changelist" comment="+">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -74,6 +77,9 @@
       <workItem from="1610483517803" duration="3012000" />
       <workItem from="1610486584602" duration="3637000" />
       <workItem from="1610553882164" duration="6136000" />
+      <workItem from="1610560573622" duration="110000" />
+      <workItem from="1610561169020" duration="284000" />
+      <workItem from="1610561468984" duration="157000" />
     </task>
     <task id="LOCAL-00001" summary="+">
       <created>1610377047921</created>
@@ -148,6 +154,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="+nearly_done &#10;-need some conde formatting" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Project$main.coverage" NAME="main Coverage Results" MODIFIED="1610375670959" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Project$main.coverage" NAME="main Coverage Results" MODIFIED="1610561582553" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

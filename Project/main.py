@@ -4,9 +4,6 @@ import pandas as pd
 import time
 import os
 import argparse
-import sys
-import subprocess
-from shutil import which
 
 def get_pid(name):
     pids = []
