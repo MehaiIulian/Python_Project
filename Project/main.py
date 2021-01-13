@@ -136,35 +136,51 @@ def kill_process(name):
             p = psutil.Process(pid)
             p.terminate()
 
-
-
-
-
 def create_process(name):
     try:
         os.startfile(name)
     except FileNotFoundError:
-        print("Please check the name again")
+        print("Please check the name or the path again")
+
+def suspend_process(pid):
+    try:
+        psutil.Process(pid).suspend()
+        print(f"Process with pid {pid} is {psutil.Process(pid).status()}")
+    except psutil.NoSuchProcess():
+        print("No process found with specified pid")
+        pass
+
+
+def resume_process(pid):
+    try:
+        psutil.Process(pid).resume()
+        print(f"Process with pid {pid} is {psutil.Process(pid).status()}")
+    except psutil.NoSuchProcess():
+        print("No process found with specified pid")
+        pass
+
+
 
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Process Viewer & Monitor")
-    parser.add_argument("-c", "--columns", help="""Columns to show,pid is set as index and available columns are 
+    parser.add_argument("--columns", help="""Columns to show,pid is set as index and available columns are 
                                                 name,create_time,cores,cpu_usage,status,nice,memory_usage,read_bytes,write_bytes,n_threads,username.
                                                 Default is name,path.""",
                         default="name,path")
-    parser.add_argument("-s", "--sort-by", dest="sort_by", help="Column to sort by, default is memory_usage .",
+    parser.add_argument("--name", help="Name a process name to show details about it", default="")
+    parser.add_argument("--sort-by", dest="sort_by", help="Column to sort by, default is memory_usage .",
                         default="memory_usage")
     parser.add_argument("--descending", action="store_true", help="Whether to sort in descending order.")
-    parser.add_argument("-n", help="Number of processes to show, will show all if 0 is specified, default is 25 .",
-                        default=sys.maxsize)
-    parser.add_argument("-u", "--live-update", action="store_true",
-                        help="Whether to keep the program on and updating process information each second.")
+    parser.add_argument("--lines", help="Number of processes to show, will show all if 0 is specified, default is -1 and shows nothing.",
+                        default=-1)
+    parser.add_argument("--live-update", action="store_true",
+                        help="Whether to keep the program on and updating process information each second.Also please enter how many lines to show.")
     parser.add_argument("--kill", help="Enter the process name to kill.", default=0)
     parser.add_argument("--create", help="Enter the process name to create.", default=0)
     parser.add_argument("--suspend", help="Enter the process pid to suspend.", default=0)
     parser.add_argument("--resume", help="Enter the process pid to resume.", default=0)
-    parser.add_argument("--pid", help="Get the pid of a process" , default="-")
+    parser.add_argument("--pid", help="Get the pids of a process. Enter the process name" , default="")
 
 
 
@@ -180,31 +196,54 @@ if __name__ == "__main__":
     pid = get_pid(pid)
     #print(pid)
 
+
+
+    lines = int(args.lines)
+    live_update = args.live_update
+
+
     kill = args.kill
     if kill != 0:
         kill_process(kill)
 
     create = args.create
-    if create !=0:
-        print(create)
+    if create != 0:
         create_process(create)
 
-
     suspend = int(args.suspend)
+    if suspend != 0:
+        suspend_process(suspend)
+
     resume = int(args.resume)
-    n = int(args.n)
-    live_update = args.live_update
+    if resume != 0:
+        resume_process(resume)
+
+
 
     # print the processes for the first time
     processes = get_processes_info()
     df = construct_dataframe(processes)
 
-    if n == 0:
-        print(df[columns].to_string())
-    elif n > 0:
-        print(df[columns].head(n).to_string())
+    name = args.name
+    if name:
+        print(name)
+
+        if lines == 0:
+            dfn = df.loc[df['name'] == name]
+            print(dfn[columns].to_string())
+        elif lines > 0:
+            dfn = df.loc[df['name'] == name]
+            df.loc[df['name'] == name]
+            print(dfn[columns].head(lines).to_string())
+        else:
+            pass
     else:
-        pass
+        if lines == 0:
+            print(df[columns].to_string())
+        elif lines > 0:
+            print(df[columns].head(lines).to_string())
+        else:
+            pass
 
     # print continuously
     while live_update:
@@ -212,8 +251,19 @@ if __name__ == "__main__":
         processes = get_processes_info()
         df = construct_dataframe(processes)
 
-        if n == 0:
-            print(df[columns].to_string())
-        elif n > 0:
-            print(df[columns].head(n).to_string())
+        if name:
+            print(name)
+
+            if lines == 0:
+                dfn = df.loc[df['name'] == name]
+                print(dfn[columns].to_string())
+            elif lines > 0:
+                dfn = df.loc[df['name'] == name]
+                df.loc[df['name'] == name]
+                print(dfn[columns].head(lines).to_string())
+        else:
+            if lines == 0:
+                print(df[columns].to_string())
+            elif lines > 0:
+                print(df[columns].head(lines).to_string())
         time.sleep(0.7)
