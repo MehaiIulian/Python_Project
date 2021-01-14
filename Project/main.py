@@ -163,6 +163,11 @@ def resume_process(pid):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Process Viewer & Monitor & Operations")
+    parser.add_argument("--kill", help="Enter the process name to kill.", default=0)
+    parser.add_argument("--create", help="Enter the process name to create.", default=0)
+    parser.add_argument("--suspend", help="Enter the process pid to suspend.", default=0)
+    parser.add_argument("--resume", help="Enter the process pid to resume.", default=0)
+    parser.add_argument("--pid", help="Get the pids of a process. Enter the process name.", default="")
     parser.add_argument("--columns", help="""Columns to display,pid is set as index and available columns are 
                                                 name,path,create_time,cores,cpu_usage,status,nice,memory_usage,read_bytes,write_bytes,n_threads,username.
                                                 Default is name,path.""",
@@ -179,11 +184,6 @@ if __name__ == "__main__":
                         default=-1)
     parser.add_argument("--live-update", action="store_true",
                         help="Whether to keep the program on and updating process information each second.")
-    parser.add_argument("--kill", help="Enter the process name to kill.", default=0)
-    parser.add_argument("--create", help="Enter the process name to create.", default=0)
-    parser.add_argument("--suspend", help="Enter the process pid to suspend.", default=0)
-    parser.add_argument("--resume", help="Enter the process pid to resume.", default=0)
-    parser.add_argument("--pid", help="Get the pids of a process. Enter the process name.", default="")
 
     # parse arguments
     args = parser.parse_args()
@@ -194,7 +194,8 @@ if __name__ == "__main__":
     descending = args.descending
 
     pid = args.pid
-    pid = get_pid(pid)
+    if pid:
+        print(get_pid(pid))
 
     lines = int(args.lines)
     live_update = args.live_update
