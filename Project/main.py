@@ -6,24 +6,6 @@ import os
 import argparse
 
 
-# return pids of a process
-def get_pid(name):
-    pids = []
-    for proc in psutil.process_iter():
-        if name in proc.name():
-            pid = proc.pid
-            pids.append(pid)
-    return pids
-
-
-# format for process size
-def get_size(bytes):
-    for unit in ['', 'K', 'M', 'G', 'T', 'P']:
-        if bytes < 1024:
-            return f"{bytes:.2f}{unit}B"
-        bytes /= 1024
-
-
 # current processes that run
 def get_processes_info():
     # the list the contain all process dictionaries
@@ -97,24 +79,22 @@ def get_processes_info():
     return processes
 
 
-def construct_dataframe(processes):
-    df = pd.DataFrame(processes)
+# return pids of a process
+def get_pid(name):
+    pids = []
+    for proc in psutil.process_iter():
+        if name in proc.name():
+            pid = proc.pid
+            pids.append(pid)
+    return pids
 
-    # set pid as index
-    df.set_index('pid', inplace=True)
 
-    # sort rows by the column passed as argument
-    df.sort_values(sort_by, inplace=True, ascending=not descending)
-
-    # converting bytes in a nice format
-    df['memory_usage'] = df['memory_usage'].apply(get_size)
-    df['write_bytes'] = df['write_bytes'].apply(get_size)
-    df['read_bytes'] = df['read_bytes'].apply(get_size)
-
-    # convert to proper date format
-    df['create_time'] = df['create_time'].apply(datetime.strftime, args=("%Y-%m-%d %H:%M:%S",))
-
-    return df
+# format for process size
+def get_size(bytes):
+    for unit in ['', 'K', 'M', 'G', 'T', 'P']:
+        if bytes < 1024:
+            return f"{bytes:.2f}{unit}B"
+        bytes /= 1024
 
 
 # convert columns string to a list
@@ -158,6 +138,26 @@ def resume_process(pid):
     except psutil.NoSuchProcess(pid):
         print("No process found with specified pid")
         pass
+
+
+def construct_dataframe(processes):
+    df = pd.DataFrame(processes)
+
+    # set pid as index
+    df.set_index('pid', inplace=True)
+
+    # sort rows by the column passed as argument
+    df.sort_values(sort_by, inplace=True, ascending=not descending)
+
+    # converting bytes in a nice format
+    df['memory_usage'] = df['memory_usage'].apply(get_size)
+    df['write_bytes'] = df['write_bytes'].apply(get_size)
+    df['read_bytes'] = df['read_bytes'].apply(get_size)
+
+    # convert to proper date format
+    df['create_time'] = df['create_time'].apply(datetime.strftime, args=("%Y-%m-%d %H:%M:%S",))
+
+    return df
 
 
 if __name__ == "__main__":
