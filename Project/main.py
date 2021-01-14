@@ -67,7 +67,7 @@ def get_processes_info():
                 username = "N/A"
 
             # get the path of the process executable
-            path = process.exe()
+            path = process.exe().upper()
 
         processes.append({
             'pid': pid, 'name': name, 'path': path, 'create_time': create_time,
